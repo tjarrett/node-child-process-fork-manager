@@ -31,7 +31,7 @@ const child = require('child_process')
  *  }, (Math.floor(Math.random() * 3) + 1)*1000);
  * }
  */
-class child_process_fork_manager {
+class ChildProcessForkManager {
     /**
      * Constructor that takes a settings object as input. Right now the only settings is "maxForks". If not
      * provided, maxForks will be equal to the number of CPU cores.
@@ -190,4 +190,4 @@ class child_process_fork_manager {
 
 }
 
-exports.child_process_fork_manager = child_process_fork_manager;
+module.exports = ChildProcessForkManager;
