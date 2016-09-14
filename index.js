@@ -1,6 +1,7 @@
 const child = require('child_process')
     , merge = require('merge')
-    , os = require('os');
+    , os = require('os')
+    , winston = require('winston')
 
 /**
  * Class for managing forks. This class is intended to be used with scripts that come alive, do their thing,
@@ -47,6 +48,8 @@ class child_process_fork_manager {
         this._queuedForks = [];
         this._forks = [];
 
+        winston.level = ((process.env.LOG_LEVEL) ? process.env.LOG_LEVEL : 'warn');
+
     }
 
     /**
@@ -82,10 +85,10 @@ class child_process_fork_manager {
      * @private
      */
     _exitHandler(childProcess) {
-        console.log('childProcess with pid just exited', childProcess.pid);
+        winston.log('debug', 'childProcess with pid just exited', childProcess.pid)
         var index = this._forks.indexOf(childProcess);
         this._forks.splice(index, 1);
-        console.log("Forks open ", this._forks.length);
+        winston.log("debug", "Forks open ", this._forks.length);
         this._run();
 
     }
@@ -95,9 +98,9 @@ class child_process_fork_manager {
      * @private
      */
     _run() {
-        console.log('Run called and there are ' + this._queuedForks.length + ' in the queue.');
+        winston.log('debug', 'Run called and there are ' + this._queuedForks.length + ' in the queue.');
         if (this._queuedForks.length == 0) {
-            console.log('Um... queue is empty... ');
+            winston.log('debug', 'Queue is empty so nothing to do...');
             return;
         }
 
@@ -109,14 +112,13 @@ class child_process_fork_manager {
             var childProcess = require('child_process').fork(f.modulePath, f.args, {});
             this._forks.push(childProcess)
 
-            console.log("Starting child process with pid", childProcess.pid)
+            winston.log('debug', "Starting child process with pid", childProcess.pid)
             childProcess.on('exit', (code, signal) => {
                 this._exitHandler(childProcess);
             });
 
             childProcess.on('error', (error) => {
-                console.log('error');
-                console.log(error);
+                winston.log('error', 'ERROR: ', error);
                 this._exitHandler(childProcess);
 
                 if (typeof f.callback == 'function') {
@@ -127,8 +129,7 @@ class child_process_fork_manager {
 
             });
 
-
-            console.log("Forks open ", this._forks.length);
+            winston.log('debug', "Count forks open ", this._forks.length);
 
             if (typeof f.callback == 'function') {
                 f.callback(null, childProcess);
@@ -137,7 +138,7 @@ class child_process_fork_manager {
             f.promise.resolve(childProcess);
 
         } else {
-            console.log('Whoops we have ' + this._forks.length + ' open so not running this one right now...');
+            winston.log('debug', 'Whoops we have ' + this._forks.length + ' open so not running this one right now...');
 
         }
 

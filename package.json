@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/tjarrett/node-child-process-fork-manager#readme",
   "dependencies": {
-    "merge": "^1.2.0"
+    "merge": "^1.2.0",
+    "winston": "^2.2.0"
   }
 }
