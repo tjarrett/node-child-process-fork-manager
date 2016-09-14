@@ -1,0 +1,25 @@
+{
+  "name": "child_process_fork_manager",
+  "version": "0.1.0",
+  "description": "A library for queueing and managing forking in node.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjarrett/node-child-process-fork-manager.git"
+  },
+  "keywords": [
+    "fork",
+    "child",
+    "process",
+    "queue"
+  ],
+  "author": "Tim Jarrett",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tjarrett/node-child-process-fork-manager/issues"
+  },
+  "homepage": "https://github.com/tjarrett/node-child-process-fork-manager#readme"
+}
